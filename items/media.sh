@@ -8,7 +8,10 @@ sketchybar --add item media right \
   icon.color=$ACCENT_COLOR \
   background.drawing=off \
   click_script="aerospace workspace Music" \
+  label.font="BigBlueTerm437 Nerd Font Propo:Regular:12.0" \
   script="$PLUGIN_DIR/media.sh" \
   --subscribe media media_change
 
 #click_script="open -a Spotify" \
+
+# TODO: Add slowing moving animation for the text
