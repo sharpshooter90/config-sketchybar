@@ -4,7 +4,7 @@
 sketchybar --add event aerospace_workspace_change
 
 # Define your spaces with names and corresponding Nerd Font icons
-SPACES=("Home:Home:Home" "Web:B:Arc" "IDEA:I:IntelliJ IDEA" "Slack:S:Slack" "Music:M:Spotify" "Terminal:T:Terminal" "Obsidian:O:Obsidian" "Zoom:Z:zoom.us")
+SPACES=("Web:WEB:Arc" "Des:DES:Figma" "Obsidian:WRITING:Obsidian IDEA" "Code:CODE:Code" "Terminal:TERM:Terminal" "Others:OTHERS:Others")
 
 # Add and configure spaces
 for SPACE in "${SPACES[@]}"; do
