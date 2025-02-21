@@ -4,7 +4,7 @@
 sketchybar --add event aerospace_workspace_change
 
 # Define your spaces with names and corresponding Nerd Font icons
-SPACES=("Web:WEB:Arc" "Des:DES:Figma" "Obsidian:WRITING:Obsidian IDEA" "Code:CODE:Code" "Terminal:TERM:Terminal" "Others:OTHERS:Others")
+SPACES=("Web:WEB:Arc" "Des:DES:Figma" "Obsidian:WRITING:Obsidian" "Code:CODE:Code" "Terminal:TERM:Terminal" "Others:OTHERS:Others")
 
 # Add and configure spaces
 for SPACE in "${SPACES[@]}"; do
@@ -26,5 +26,7 @@ for SPACE in "${SPACES[@]}"; do
       $CONFIG_DIR/plugins/icon_map_fn.sh "$ICON"
     )" \
     click_script="aerospace workspace $WORKSPACE_NAME" \
-    script="$PLUGIN_DIR/aerospace.sh $WORKSPACE_NAME"
+    script="$PLUGIN_DIR/aerospace.sh $WORKSPACE_NAME" \
+    background.color="$ACTIVE_WORKSPACE_COLOR" \
+    background.border_color="$ACTIVE_WORKSPACE_COLOR"
 done

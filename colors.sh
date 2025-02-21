@@ -3,9 +3,9 @@
 export WHITE=0xffffffff
 
 # -- Oxocarbon Scheme --
-export BAR_COLOR=0xff161616
-export ITEM_BG_COLOR=0xff262626
-export ACCENT_COLOR=0xfff2f4f8
+# export BAR_COLOR=0xff161616
+# export ITEM_BG_COLOR=0xff262626
+# export ACCENT_COLOR=0xfff2f4f8
 
 # -- Teal Scheme --
 # export BAR_COLOR=0xff001f30
@@ -43,6 +43,8 @@ export ACCENT_COLOR=0xfff2f4f8
 # export ACCENT_COLOR=0xfff97716
 
 # -- Yellow Scheme --
-# export BAR_COLOR=0xff2d2b02
-# export ITEM_BG_COLOR=0xff8e7e0a
-# export ACCENT_COLOR=0xfff7fc17
+export BAR_COLOR=0xff2d2b02
+export ITEM_BG_COLOR=0xff8e7e0a
+export ACCENT_COLOR=0xfff7fc17
+
+export $ACTIVE_WORKSPACE_COLOR=0xfff97716
