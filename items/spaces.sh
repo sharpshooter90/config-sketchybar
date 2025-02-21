@@ -3,9 +3,9 @@
 # Add event to subscribe
 sketchybar --add event aerospace_workspace_change
 
-# Define your spaces with names and corresponding Nerd Font icons
-MAIN_SPACES=("Web:WEB:Arc" "Des:DES:Figma" "Obsidian:WRITING:Obsidian" "Code:CODE:Code")
-SECONDARY_SPACES=("Terminal:TERM:Terminal" "Others:OTHERS:Others")
+# Define your spaces with names, titles, icons, and corresponding Aerospace workspace IDs
+MAIN_SPACES=("1:Web:WEB:Arc" "2:Des:DES:Figma" "3:Obsidian:WRITING:Obsidian" "4:Code:CODE:Code")
+SECONDARY_SPACES=("5:Terminal:TERM:Terminal" "6:Others:OTHERS:Others")
 
 # Function to configure workspace items
 configure_workspace() {
@@ -13,22 +13,26 @@ configure_workspace() {
   local GROUP=$2
   local DISPLAY=${3:-"all"}  # Default to "all" if not specified
   
-  WORKSPACE_NAME=${SPACE%%:*}  # Extract name (everything before ':')
-  ICON=${SPACE##*:}           # Extract icon (everything after ':')
-  
-  # Extract the part between the colons
-  TITLE=${SPACE#*:}           # Remove everything before the first colon
-  TITLE=${TITLE%%:*}          # Now remove everything after the next colon
+  # Extract components from the SPACE string (e.g., "1:Web:WEB:Arc")
+  WORKSPACE_ID=${SPACE%%:*}           # Numeric ID (e.g., "1")
+  REST=${SPACE#*:}                    # Everything after first colon (e.g., "Web:WEB:Arc")
+  WORKSPACE_NAME=${REST%%:*}          # Custom name (e.g., "Web")
+  TITLE=${REST#*:}                    # Remove custom name (e.g., "WEB:Arc")
+  TITLE=${TITLE%%:*}                  # Extract title (e.g., "WEB")
+  ICON=${REST##*:}                    # Extract icon (e.g., "Arc")
 
+  # Define the click script to switch workspace using numeric ID
+  local CLICK_SCRIPT="aerospace workspace '$WORKSPACE_ID' && sketchybar --trigger aerospace_workspace_change"
+
+  # Add and configure the workspace item in sketchybar
   sketchybar --add item "workspace.$WORKSPACE_NAME" left \
     --subscribe "workspace.$WORKSPACE_NAME" aerospace_workspace_change \
     --set "workspace.$WORKSPACE_NAME" \
-    icon.font="sketchybar-app-font:Regular:16.0" \
-    script="$PLUGIN_DIR/front_app.sh" \
+    icon.font="sketchybar-app-font:Regular:13.0" \
     label="$TITLE" \
     icon="$($CONFIG_DIR/plugins/icon_map_fn.sh "$ICON")" \
-    click_script="aerospace workspace $WORKSPACE_NAME" \
-    script="$PLUGIN_DIR/aerospace.sh $WORKSPACE_NAME" \
+    click_script="$CLICK_SCRIPT" \
+    script="$PLUGIN_DIR/aerospace.sh $WORKSPACE_ID" \
     background.color="$ACTIVE_WORKSPACE_COLOR" \
     background.border_color="$ACTIVE_WORKSPACE_COLOR" \
     associated_display=$DISPLAY

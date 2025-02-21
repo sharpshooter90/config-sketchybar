@@ -12,8 +12,8 @@ sketchybar --bar position=top height=40 color=$BAR_COLOR
 default=(
   padding_left=5
   padding_right=5
-  icon.font="JetBrainsMono Nerd Font:Bold:17.0"
-  label.font="JetBrainsMono Nerd Font:Bold:14.0"
+  icon.font="JetBrainsMono Nerd Font:Bold:14.0"
+  label.font="JetBrainsMono Nerd Font:Bold:12.0"
   icon.color=$WHITE
   label.color=$WHITE
   background.color=$ITEM_BG_COLOR
