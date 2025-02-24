@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Add event to subscribe
+sketchybar --add event aerospace_workspace_change
+
 # Add events to subscribe
 sketchybar --add event display_change
 
