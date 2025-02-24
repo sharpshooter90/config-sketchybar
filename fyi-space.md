@@ -34,13 +34,24 @@ sketchybar --set spaces_listener script="$PLUGIN_DIR/spaces.sh"
 sketchybar --subscribe spaces_listener display_change
 ```
 
-In the corresponding `plugins/spaces.sh` script, we react exclusively to the display_change event:
+In the corresponding `plugins/spaces.sh` script, instead of reloading the entire configuration upon a display change, we now re-read the display configuration and selectively update only the workspace items and brackets with their correct associated display. For example:
 
 ```bash
 case "${SENDER}" in
     "display_change")
         echo "Display change detected: active display $INFO at $(date)" >> /tmp/sketchybar_spaces.log
-        sketchybar --reload
+
+        # Re-read display configuration
+        DISPLAY_COUNT=$(sketchybar --query displays | jq -r 'length')
+        if [ "${DISPLAY_COUNT:-0}" -eq 1 ]; then
+            MAIN_DISPLAY=$(sketchybar --query displays | jq -r '.[0].DirectDisplayID')
+            handle_single_display "$MAIN_DISPLAY"
+        else
+            # Assume external monitor (BenQ) is at index 1 and built-in (Mac) is at index 0
+            MAIN_DISPLAY=$(sketchybar --query displays | jq -r '.[1].DirectDisplayID')
+            SECONDARY_DISPLAY=$(sketchybar --query displays | jq -r '.[0].DirectDisplayID')
+            handle_dual_display "$MAIN_DISPLAY" "$SECONDARY_DISPLAY"
+        fi
         ;;
     *)
         # Ignore all other events
@@ -53,7 +64,7 @@ esac
 Our configuration also dynamically maps workspaces based on the number of connected displays:
 
 - **Single Display Scenario:**
-  When only one display is available (for example, if you unplug your external monitor), all workspace items – both main (workspaces 1–4) and secondary (workspaces 5–6) – are assigned to that single display. In this case, a single bracket is created that groups all workspace items together.
+  When only one display is available (for example, if you unplug your external monitor), all workspace items – including main (workspaces 1–4) and secondary (workspaces 5–6) – are assigned to that single display. In this case, a single bracket is created that groups all workspace items together.
 
 - **Dual Display Scenario:**
   When two displays are available, we designate the external monitor (e.g., an external BenQ) as the **MAIN_DISPLAY** and the MacBook's built-in display as the **SECONDARY_DISPLAY**. Specifically, we assign:
@@ -86,4 +97,4 @@ fi
 
 ## Conclusion
 
-While the display_change event is natively supported by Sketchybar and can be handled directly in an item, our plugin-based approach not only centralizes event logic but also enables dynamic workspace mapping based on the available displays. This design ensures that your workspace layout adapts to your current monitor setup – grouping workspaces appropriately whether you have a single display or dual displays – and maintains a flexible, maintainable configuration for future enhancements.
+While the display_change event is natively supported by Sketchybar and can be handled directly in an item, our plugin-based approach not only centralizes event logic but also enables dynamic workspace mapping based on available displays. This design ensures that your workspace layout adapts to your current monitor setup – grouping workspaces appropriately whether you have a single display or dual displays – and maintains a flexible, maintainable configuration for future enhancements.
