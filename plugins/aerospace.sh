@@ -12,7 +12,7 @@ if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
   # - Show the workspace label/name
   sketchybar --set "$NAME" \
     background.border_width=1 \
-    background.border_color=0xffffffff \
+    background.border_color=0xffffffff 
     # label.drawing=on
 else
   # For unfocused workspaces:
@@ -21,6 +21,6 @@ else
   # - Hide the workspace label/name
   sketchybar --set "$NAME" \
     background.border_width=0 \
-    background.border_color=0xff262626 \
+    background.border_color=0xff262626
     # label.drawing=off
 fi

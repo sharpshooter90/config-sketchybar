@@ -71,7 +71,7 @@ if [ "$DISPLAY_COUNT" -eq 1 ]; then
              workspace.Terminal \
              workspace.Others \
              --set all_spaces \
-             background.color=$ITEM_BG_PRIMARY_COLOR \
+             background.color=$ACTIVE_WORKSPACE_COLOR \
              background.corner_radius=5 \
              background.height=26 \
              associated_display=$MAIN_DISPLAY
