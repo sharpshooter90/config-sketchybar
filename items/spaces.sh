@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# Add event to subscribe
-sketchybar --add event aerospace_workspace_change
+# Add events to subscribe
+sketchybar --add event display_change
+
+# Handle display changes by reloading sketchybar
+sketchybar --add item spaces_listener popup
+sketchybar --set spaces_listener script="$PLUGIN_DIR/spaces.sh"
+sketchybar --subscribe spaces_listener display_change
 
 # Retrieve display DirectDisplayIDs from sketchybar
 DISPLAY_COUNT=$(sketchybar --query displays | jq 'length')
