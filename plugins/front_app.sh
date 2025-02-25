@@ -11,6 +11,15 @@ update_visibility() {
   local item_display=$2
   local focused_monitor=$3
   
+  # Get the display count
+  local display_count=$(sketchybar --query displays | jq 'length')
+  
+  # If there's only one display, always show the front app
+  if [ "$display_count" -eq 1 ]; then
+    sketchybar --set "$name" drawing=on
+    return 0
+  fi
+  
   # Clean up monitor IDs for comparison
   local clean_item_display=$(get_monitor_id "$item_display")
   local clean_focused_monitor=$(get_monitor_id "$focused_monitor")

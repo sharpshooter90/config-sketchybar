@@ -23,7 +23,7 @@ handle_single_display() {
     local display_id=$1
     # Update all workspace items
     update_workspace_items "$display_id" \
-        workspace.Web workspace.Des workspace.Obsidian workspace.Code workspace.Terminal workspace.Others
+        workspace.Web workspace.Des workspace.Obsidian workspace.Code workspace.Terminal workspace.Comm
     
     # Update the single bracket for all workspaces, if it exists
     sketchybar --set all_spaces associated_display=$display_id
@@ -38,7 +38,7 @@ handle_dual_display() {
     update_workspace_items "$main_display" workspace.Web workspace.Des workspace.Obsidian workspace.Code
     
     # Update secondary workspace items (workspaces 5-6) to use the built-in display (secondary_display)
-    update_workspace_items "$secondary_display" workspace.Terminal workspace.Others
+    update_workspace_items "$secondary_display" workspace.Terminal workspace.Comm
     
     # Update the corresponding brackets
     sketchybar --set main_spaces associated_display=$main_display

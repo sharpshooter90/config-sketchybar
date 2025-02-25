@@ -23,7 +23,7 @@ fi
 
 # Define your spaces with names, titles, icons, and corresponding Aerospace workspace IDs
 MAIN_SPACES=("1:Web:WEB:Arc" "2:Des:DES:Figma" "3:Obsidian:WRITING:Obsidian" "4:Code:CODE:Code")
-SECONDARY_SPACES=("5:Terminal:TERM:Terminal" "6:Others:OTHERS:Others")
+SECONDARY_SPACES=("5:Terminal:TERM:Terminal" "6:Comm:COM:Comm")
 
 # Function to configure workspace items
 configure_workspace() {
@@ -69,9 +69,9 @@ if [ "$DISPLAY_COUNT" -eq 1 ]; then
              workspace.Obsidian \
              workspace.Code \
              workspace.Terminal \
-             workspace.Others \
+             workspace.Comm \
              --set all_spaces \
-             background.color=$ACTIVE_WORKSPACE_COLOR \
+             background.color=$ACTIVE_WORKSPACE_BG_COLOR \
              background.corner_radius=5 \
              background.height=26 \
              associated_display=$MAIN_DISPLAY
@@ -91,16 +91,16 @@ else
              workspace.Obsidian \
              workspace.Code \
              --set main_spaces \
-             background.color=$ITEM_BG_PRIMARY_COLOR \
+             background.color=$ACTIVE_WORKSPACE_BG_COLOR \
              background.corner_radius=5 \
              background.height=26 \
              associated_display=$MAIN_DISPLAY
   
   sketchybar --add bracket secondary_spaces \
              workspace.Terminal \
-             workspace.Others \
+             workspace.Comm \
              --set secondary_spaces \
-             background.color=$ITEM_BG_COLOR \
+             background.color=$ACTIVE_WORKSPACE_SECONDARY_BG_COLOR \
              background.corner_radius=5 \
              background.height=26 \
              associated_display=$SECONDARY_DISPLAY

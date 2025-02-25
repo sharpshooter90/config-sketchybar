@@ -30,7 +30,7 @@ function icon_map() {
   "Other")
     icon_result=":default:"
     ;;
-  "Android Messages")
+  "Android Messages"| "Comm")
     icon_result=":android_messages:"
     ;;
   "Reeder")
