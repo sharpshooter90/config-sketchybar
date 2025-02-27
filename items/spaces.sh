@@ -51,6 +51,7 @@ configure_workspace() {
     --set "workspace.$WORKSPACE_NAME" \
     icon.font="sketchybar-app-font:Regular:13.0" \
     label="$TITLE" \
+    label.y_offset=1.5 \
     icon="$($CONFIG_DIR/plugins/icon_map_fn.sh "$ICON")" \
     click_script="$CLICK_SCRIPT" \
     script="$FOCUS_SCRIPT && $DISPLAY_SCRIPT && $SHOW_ALL_WINDOWS_APP_ICONS_SCRIPT" \
