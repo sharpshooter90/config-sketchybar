@@ -7,7 +7,7 @@ DISPLAY_COUNT=$(sketchybar --query displays | jq 'length')
 
 if [ "$DISPLAY_COUNT" -eq 1 ]; then
   # For single display setup, just create one front_app item
-  MAIN_DISPLAY=$(sketchybar --query displays | jq -r '.[0].DirectDisplayID')
+  MAIN_DISPLAY=1
   sketchybar --add item front_app_main left \
     --set front_app_main background.color=$ACCENT_COLOR \
       icon.color=$BAR_COLOR \
@@ -18,8 +18,8 @@ if [ "$DISPLAY_COUNT" -eq 1 ]; then
       --subscribe front_app_main front_app_switched monitor_focus
 else
   # For multi-display setup, create separate front_app items for each display
-  MAIN_DISPLAY=$(sketchybar --query displays | jq -r '.[1].DirectDisplayID')
-  SECONDARY_DISPLAY=$(sketchybar --query displays | jq -r '.[0].DirectDisplayID')
+  MAIN_DISPLAY=1
+  SECONDARY_DISPLAY=2
   sketchybar --add item front_app_main left \
     --set front_app_main background.color=$ACCENT_COLOR \
       icon.color=$BAR_COLOR \

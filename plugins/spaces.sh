@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+
+echo '============================================'
 # This plugin acts as a common listener for Sketchybar events
 # and updates your workspaces accordingly.
 #
@@ -12,58 +14,74 @@
 # Helper function to update a list of workspace items with a given display ID
 update_workspace_items() {
     local display_id=$1
+    if [ -z "$display_id" ]; then
+        echo "Error: No display ID provided"
+        return 1
+    fi
     shift
-    for item in "$@"; do
+    if [ $# -eq 0 ]; then
+        echo "Warning: No workspace items provided to update"
+        return 0
+    fi
+    # Use an array to store workspace items
+    local -a workspace_items=("$@")
+    echo "Workspace items to update: ${workspace_items[*]}"
+    for item in "${workspace_items[@]}"; do
+        echo "Updating $item to display $display_id"
         sketchybar --set "$item" associated_display=$display_id
     done
 }
 
+MAIN_DISPLAY=$1
+SECONDARY_DISPLAY=$2
+
+
 # Handle the case where a single display is available
 handle_single_display() {
-    local display_id=$1
     # Update all workspace items
-    update_workspace_items "$display_id" \
-        workspace.Web workspace.Des workspace.Obsidian workspace.Code workspace.Terminal workspace.Comm
+    update_workspace_items "$MAIN_DISPLAY" \
+        "workspace.Web" "workspace.Des" "workspace.Obsidian" "workspace.Code" "workspace.Terminal" "workspace.Comm"
     
     # Update the single bracket for all workspaces, if it exists
-    sketchybar --set all_spaces associated_display=$display_id
+    sketchybar --set all_spaces associated_display=$MAIN_DISPLAY
 }
 
 # Handle the case where two displays are available
 handle_dual_display() {
-    local main_display=$1
-    local secondary_display=$2
-    
+    echo "handle_dual_display called"
     # Update main workspace items (workspaces 1-4) to use the external monitor (main_display)
-    update_workspace_items "$main_display" workspace.Web workspace.Des workspace.Obsidian workspace.Code
+    update_workspace_items "$MAIN_DISPLAY" "workspace.Web" "workspace.Des" "workspace.Obsidian" "workspace.Code"
     
     # Update secondary workspace items (workspaces 5-6) to use the built-in display (secondary_display)
-    update_workspace_items "$secondary_display" workspace.Terminal workspace.Comm
+    update_workspace_items "$SECONDARY_DISPLAY" "workspace.Terminal" "workspace.Comm"
     
     # Update the corresponding brackets
-    sketchybar --set main_spaces associated_display=$main_display
-    sketchybar --set secondary_spaces associated_display=$secondary_display
+    sketchybar --set main_spaces \
+        associated_display=$MAIN_DISPLAY
+    sketchybar --set secondary_spaces \
+        associated_display=$SECONDARY_DISPLAY
 }
 
 # React only to the display_change event
+echo "Display change detected: $SENDER"
 case "${SENDER}" in
     "display_change")
-        echo "Display change detected: active display $INFO at $(date)" >> /tmp/sketchybar_spaces.log
-        
-        # Re-read display configuration
-        DISPLAY_COUNT=$(sketchybar --query displays | jq -r 'length')
-        if [ "${DISPLAY_COUNT:-0}" -eq 1 ]; then
-            MAIN_DISPLAY=$(sketchybar --query displays | jq -r '.[0].DirectDisplayID')
-            handle_single_display "$MAIN_DISPLAY"
-        else
-            # Assume external monitor (BenQ) is at index 1 and built-in (Mac) is at index 0
-            MAIN_DISPLAY=$(sketchybar --query displays | jq -r '.[1].DirectDisplayID')
-            SECONDARY_DISPLAY=$(sketchybar --query displays | jq -r '.[0].DirectDisplayID')
-            handle_dual_display "$MAIN_DISPLAY" "$SECONDARY_DISPLAY"
+        # Query both sketchybar's display count and system display count to detect changes
+        # We check both since sketchybar may not be immediately in sync with system changes
+        # This ensures we handle display changes reliably and don't miss the first instance
+        # of a display being connected/disconnected
+        # Get current display count and call appropriate function
+        system_profiler SPDisplaysDataType
+        DISPLAY_COUNT=$(sketchybar --query displays | jq '. | length')
+        if [ "$DISPLAY_COUNT" -eq 1 ]; then
+            echo "handle_single_display"
+            handle_single_display
+        elif [ "$DISPLAY_COUNT" -eq 2 ]; then
+            echo "handle_dual_display"
+            handle_dual_display
         fi
         ;;
     *)
         # Ignore all other events
         ;;
-esac 
-
+esac
