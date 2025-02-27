@@ -41,7 +41,9 @@ configure_workspace() {
 
   # Define the click script to switch workspace using numeric ID
   local CLICK_SCRIPT="aerospace workspace '$WORKSPACE_ID' && sketchybar --trigger aerospace_workspace_change"
-  local DISPLAY_SCRIPT="$PLUGIN_DIR/aerospace.sh '$WORKSPACE_ID' && $PLUGIN_DIR/spaces.sh '$MAIN_DISPLAY' '$SECONDARY_DISPLAY'"
+  local DISPLAY_SCRIPT="$PLUGIN_DIR/spaces.sh '$MAIN_DISPLAY' '$SECONDARY_DISPLAY'"
+  local FOCUS_SCRIPT="$PLUGIN_DIR/aerospace.sh '$WORKSPACE_ID'"
+  local SHOW_ALL_WINDOWS_APP_ICONS_SCRIPT="$PLUGIN_DIR/show_all_windows_app_icons.sh '$WORKSPACE_ID'"
 
   # Add and configure the workspace item in sketchybar
   sketchybar --add item "workspace.$WORKSPACE_NAME" left \
@@ -51,7 +53,7 @@ configure_workspace() {
     label="$TITLE" \
     icon="$($CONFIG_DIR/plugins/icon_map_fn.sh "$ICON")" \
     click_script="$CLICK_SCRIPT" \
-    script="$DISPLAY_SCRIPT" \
+    script="$FOCUS_SCRIPT && $DISPLAY_SCRIPT && $SHOW_ALL_WINDOWS_APP_ICONS_SCRIPT" \
     background.color="$ACTIVE_WORKSPACE_COLOR" \
     background.border_color="$ACTIVE_WORKSPACE_COLOR" \
     associated_display=$DISPLAY
