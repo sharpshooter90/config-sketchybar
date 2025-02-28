@@ -3,6 +3,8 @@
 # Add event to subscribe
 sketchybar --add event aerospace_workspace_change
 
+source "$CONFIG_DIR/colors.sh" # Source the colors configuration
+
 # Add events to subscribe
 # sketchybar --add event custom_display_change
 
@@ -30,6 +32,8 @@ configure_workspace() {
   local SPACE=$1
   local GROUP=$2
   local DISPLAY=${3:-"all"}  # Default to "all" if not specified
+  local IS_FIRST=${4:-false}  # Is this the first item in its group?
+  local IS_LAST=${5:-false}   # Is this the last item in its group?
 
   # Extract components from the SPACE string (e.g., "1:Web:WEB:Arc")
   WORKSPACE_ID=${SPACE%%:*}           # Numeric ID (e.g., "1")
@@ -45,35 +49,74 @@ configure_workspace() {
   local FOCUS_SCRIPT="$PLUGIN_DIR/aerospace.sh '$WORKSPACE_ID'"
   local SHOW_ALL_WINDOWS_APP_ICONS_SCRIPT="$PLUGIN_DIR/show_all_windows_app_icons.sh '$WORKSPACE_ID'"
 
+  # Set padding values based on position
+  local LEFT_PADDING=6
+  local RIGHT_PADDING=6
+  
+  # First item should have no left padding
+  if [ "$IS_FIRST" = true ]; then
+    LEFT_PADDING=0
+  fi
+  
+  # Last item should have no right padding
+  if [ "$IS_LAST" = true ]; then
+    RIGHT_PADDING=0
+  fi
+
+  #FIXME: Re rendering the workspace windows icons every time the workspace changes might be a bit much.
+  #FIXME: Need to figure out how we can render the focused indication in the end 
+  
   # Add and configure the workspace item in sketchybar
   sketchybar --add item "workspace.$WORKSPACE_NAME" left \
-    --subscribe "workspace.$WORKSPACE_NAME" aerospace_workspace_change display_change \
+    --subscribe "workspace.$WORKSPACE_NAME" aerospace_workspace_change display_change space_windows_change \
     --set "workspace.$WORKSPACE_NAME" \
     icon.font="sketchybar-app-font:Regular:13.0" \
+    icon.color=$WORKSPACE_ICON_COLOR \
     label="$TITLE" \
+    label.color=$WORKSPACE_LABEL_COLOR \
     label.y_offset=1.5 \
     icon="$($CONFIG_DIR/plugins/icon_map_fn.sh "$ICON")" \
     click_script="$CLICK_SCRIPT" \
     script="$FOCUS_SCRIPT && $DISPLAY_SCRIPT && $SHOW_ALL_WINDOWS_APP_ICONS_SCRIPT" \
-    background.color="$ACTIVE_WORKSPACE_COLOR" \
-    background.border_color="$ACTIVE_WORKSPACE_COLOR" \
+    background.drawing=off \
+    padding_left=4 \
+    padding_right=4 \
+    background.padding_left=$LEFT_PADDING \
+    background.padding_right=$RIGHT_PADDING \
+    label.padding_left=4 \
+    label.padding_right=4 \
     associated_display=$DISPLAY
 }
 
 if [ "$DISPLAY_COUNT" -eq 1 ]; then
   # Only one display available: assign all workspaces to the single display.
-  for SPACE in "${MAIN_SPACES[@]}" "${SECONDARY_SPACES[@]}"; do
-    configure_workspace "$SPACE" "all" "$MAIN_DISPLAY"
+  COMBINED_SPACES=("${MAIN_SPACES[@]}" "${SECONDARY_SPACES[@]}")
+  TOTAL_SPACES=${#COMBINED_SPACES[@]}
+  
+  for i in "${!COMBINED_SPACES[@]}"; do
+    IS_FIRST=false
+    IS_LAST=false
+    
+    # Check if first or last in group
+    if [ $i -eq 0 ]; then
+      IS_FIRST=true
+    fi
+    if [ $i -eq $((TOTAL_SPACES-1)) ]; then
+      IS_LAST=true
+    fi
+    
+    configure_workspace "${COMBINED_SPACES[$i]}" "all" "$MAIN_DISPLAY" "$IS_FIRST" "$IS_LAST"
   done
   
   # Create a single bracket for all workspaces
+  workspace_args=""
+  for space in "${COMBINED_SPACES[@]}"; do
+    IFS=':' read -r _ name _ _ <<< "$space"
+    workspace_args+=" workspace.$name"
+  done
+
   sketchybar --add bracket all_spaces \
-             workspace.Web \
-             workspace.Des \
-             workspace.Obsidian \
-             workspace.Code \
-             workspace.Terminal \
-             workspace.Comm \
+             $workspace_args \
              --set all_spaces \
              background.color=$ACTIVE_WORKSPACE_BG_COLOR \
              background.corner_radius=5 \
@@ -81,25 +124,65 @@ if [ "$DISPLAY_COUNT" -eq 1 ]; then
              associated_display=$MAIN_DISPLAY
 else
   # Two displays: assign main spaces to MAIN_DISPLAY and secondary spaces to SECONDARY_DISPLAY.
-  for SPACE in "${MAIN_SPACES[@]}"; do
-    configure_workspace "$SPACE" "main" "$MAIN_DISPLAY"
+  # Configure main spaces
+  MAIN_COUNT=${#MAIN_SPACES[@]}
+  for i in "${!MAIN_SPACES[@]}"; do
+    IS_FIRST=false
+    IS_LAST=false
+    
+    # Check if first or last in main group
+    if [ $i -eq 0 ]; then
+      IS_FIRST=true
+    fi
+    if [ $i -eq $((MAIN_COUNT-1)) ]; then
+      IS_LAST=true
+    fi
+    
+    configure_workspace "${MAIN_SPACES[$i]}" "main" "$MAIN_DISPLAY" "$IS_FIRST" "$IS_LAST"
   done
-  for SPACE in "${SECONDARY_SPACES[@]}"; do
-    configure_workspace "$SPACE" "secondary" "$SECONDARY_DISPLAY"
+  
+  # Configure secondary spaces
+  SECONDARY_COUNT=${#SECONDARY_SPACES[@]}
+  for i in "${!SECONDARY_SPACES[@]}"; do
+    IS_FIRST=false
+    IS_LAST=false
+    
+    # Check if first or last in secondary group
+    if [ $i -eq 0 ]; then
+      IS_FIRST=true
+    fi
+    if [ $i -eq $((SECONDARY_COUNT-1)) ]; then
+      IS_LAST=true
+    fi
+    
+    configure_workspace "${SECONDARY_SPACES[$i]}" "secondary" "$SECONDARY_DISPLAY" "$IS_FIRST" "$IS_LAST"
   done
 
   # Create brackets: one for main spaces and one for secondary spaces.
+  # First, build the workspace arguments string
+  workspace_args=""
+  for space in "${MAIN_SPACES[@]}"; do
+    IFS=':' read -r _ name _ _ <<< "$space"
+    workspace_args+=" workspace.$name"
+  done
+
+  # Add the bracket with the workspace arguments
   sketchybar --add bracket main_spaces \
-             workspace.Web \
-             workspace.Des \
-             workspace.Obsidian \
-             workspace.Code \
+             $workspace_args \
              --set main_spaces \
              background.color=$ACTIVE_WORKSPACE_BG_COLOR \
              background.corner_radius=5 \
              background.height=26 \
+             padding_left=0 \
+             padding_right=0 \
+             background.padding_left=0 \
+             background.padding_right=0 \
+             icon.padding_left=0 \
+             icon.padding_right=0 \
+             label.padding_left=0 \
+             label.padding_right=0 \
              associated_display=$MAIN_DISPLAY
-  
+
   sketchybar --add bracket secondary_spaces \
              workspace.Terminal \
              workspace.Comm \

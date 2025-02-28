@@ -7,7 +7,7 @@ sketchybar \
   icon.font="JetBrainsMono Nerd Font:Bold:18.0" \
   icon.padding_right=8 \
   icon.y_offset=2 \
-  icon.color=$WHITE \
+  icon.color=$WORKSPACE_ICON_COLOR \
   label.drawing=off \
   popup.height=35 \
   popup.background.drawing=off \

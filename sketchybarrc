@@ -6,6 +6,7 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 ITEM_DIR="$CONFIG_DIR/items"
 
 ##### Bar Appearance #####
+# INFO: we can use display prop to show the bar conditionally based on the display
 sketchybar --bar position=top height=40 color=$BAR_COLOR
 
 ##### Defaults #####
@@ -14,11 +15,12 @@ default=(
   padding_right=5
   icon.font="JetBrainsMono Nerd Font:Bold:14.0"
   label.font="JetBrainsMono Nerd Font:Bold:12.0"
-  icon.color=$WHITE
-  label.color=$WHITE
+  icon.color=$WORKSPACE_ICON_COLOR
+  label.color=$WORKSPACE_LABEL_COLOR
   background.color=$ITEM_BG_COLOR
   background.corner_radius=5
   background.height=26
+  background.color=$ITEM_BG_COLOR
   icon.padding_left=4
   icon.padding_right=4
   label.padding_left=4

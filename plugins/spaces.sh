@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-echo '============================================'
 # This plugin acts as a common listener for Sketchybar events
 # and updates your workspaces accordingly.
 #
@@ -25,9 +24,7 @@ update_workspace_items() {
     fi
     # Use an array to store workspace items
     local -a workspace_items=("$@")
-    echo "Workspace items to update: ${workspace_items[*]}"
     for item in "${workspace_items[@]}"; do
-        echo "Updating $item to display $display_id"
         sketchybar --set "$item" associated_display=$display_id
     done
 }
@@ -48,7 +45,6 @@ handle_single_display() {
 
 # Handle the case where two displays are available
 handle_dual_display() {
-    echo "handle_dual_display called"
     # Update main workspace items (workspaces 1-4) to use the external monitor (main_display)
     update_workspace_items "$MAIN_DISPLAY" "workspace.Web" "workspace.Des" "workspace.Obsidian" "workspace.Code"
     
@@ -63,7 +59,6 @@ handle_dual_display() {
 }
 
 # React only to the display_change event
-echo "Display change detected: $SENDER"
 case "${SENDER}" in
     "display_change")
         # Query both sketchybar's display count and system display count to detect changes
@@ -71,13 +66,11 @@ case "${SENDER}" in
         # This ensures we handle display changes reliably and don't miss the first instance
         # of a display being connected/disconnected
         # Get current display count and call appropriate function
-        system_profiler SPDisplaysDataType
+        #INFO: this can be used to get more display information `system_profiler SPDisplaysDataType`
         DISPLAY_COUNT=$(sketchybar --query displays | jq '. | length')
         if [ "$DISPLAY_COUNT" -eq 1 ]; then
-            echo "handle_single_display"
             handle_single_display
         elif [ "$DISPLAY_COUNT" -eq 2 ]; then
-            echo "handle_dual_display"
             handle_dual_display
         fi
         ;;

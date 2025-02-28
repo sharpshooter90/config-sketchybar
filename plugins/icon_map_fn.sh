@@ -3,7 +3,7 @@ function icon_map() {
   "Keynote" | "Keynote 讲演")
     icon_result=":keynote:"
     ;;
-  "Figma")
+  "Figma" | "Figma Beta")
     icon_result=":figma:"
     ;;
   "VMware Fusion")
@@ -11,6 +11,9 @@ function icon_map() {
     ;;
   "Alacritty" | "Hyper" | "iTerm2" | "kitty" | "Terminal" | "终端" | "WezTerm")
     icon_result=":terminal:"
+    ;;
+  "Ghostty")
+    icon_result=":ghostty:"
     ;;
   "Microsoft To Do" | "Things")
     icon_result=":things:"
@@ -146,6 +149,9 @@ function icon_map() {
     ;;
   "Code" | "Code - Insiders")
     icon_result=":code:"
+    ;;
+  "Cursor")
+    icon_result=":cursor:"
     ;;
   "Linear")
     icon_result=":linear:"
@@ -428,6 +434,9 @@ function icon_map() {
     ;;
   "WhatsApp")
     icon_result=":whats_app:"
+    ;;
+  "Wispr Flow")
+    icon_result=":mic_on:"
     ;;
   *)
     icon_result=":default:"

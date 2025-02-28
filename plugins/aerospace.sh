@@ -1,4 +1,5 @@
 #!/bin/bash
+source "$CONFIG_DIR/colors.sh" # Source the colors configuration
 
 # This script handles the appearance of workspace indicators in sketchybar
 # $1: Current workspace being processed
@@ -12,7 +13,8 @@ if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
   # - Show the workspace label/name
   sketchybar --set "$NAME" \
     background.border_width=1 \
-    background.border_color=0xffffffff 
+    background.border_color=$WORKSPACE_ITEM_BORDER_ACTIVE_COLOR \
+    background.color=$ACTIVE_WORKSPACE_SECONDARY_BG_COLOR \
     # label.drawing=on
 else
   # For unfocused workspaces:
@@ -21,6 +23,6 @@ else
   # - Hide the workspace label/name
   sketchybar --set "$NAME" \
     background.border_width=0 \
-    background.border_color=0xff262626
+    background.drawing=off \
     # label.drawing=off
 fi

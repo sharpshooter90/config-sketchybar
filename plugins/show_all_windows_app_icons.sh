@@ -3,8 +3,12 @@
 # Iterate through workspaces for all monitors and update each one with their active applications.
 # If a workspace ID is passed as $1, only update that specific workspace
 
+# Only proceed if the sender is space_windows_change
+if [[ "$SENDER" != "space_windows_change" ]]; then
+    exit 0
+fi
+
 WORKSPACE_FILTER=$1
-echo "Args: $WORKSPACE_FILTER"
 
 # Get active monitors
 MONITORS=$(aerospace list-monitors | awk '{print $1}')
@@ -32,10 +36,8 @@ get_workspace_name() {
 }
 
 for monitor in $MONITORS; do
-  echo "Monitor: $monitor"
   # Get all workspaces from current monitor
   WORKSPACES=$(aerospace list-workspaces --monitor "$monitor" --json | jq -r '.[].workspace')
-  echo "Workspaces: $WORKSPACES"
   
   for workspace in $WORKSPACES; do
     # Skip if we're filtering for a specific workspace and this isn't it
@@ -54,11 +56,9 @@ for monitor in $MONITORS; do
     
     # Get applications in current workspace
     WINDOWS_JSON=$(aerospace list-windows --monitor "$monitor" --workspace "$workspace" --json)
-    echo "Debug: Workspace $workspace ($workspace_name), Raw JSON = $WINDOWS_JSON" >> /tmp/space_windows_debug.log
     
     # Extract application names
     WINDOWS=$(echo "$WINDOWS_JSON" | jq -r '.[] | .["app-name"]')
-    echo "Debug: Workspace $workspace ($workspace_name), Parsed Windows = $WINDOWS" >> /tmp/space_windows_debug.log
 
     # Build the strip of icons or application names
     icon_strip=""
@@ -71,7 +71,6 @@ for monitor in $MONITORS; do
       icon_strip=" —"
     fi
 
-    echo "Debug: Workspace $workspace ($workspace_name), Final Icon Strip = $icon_strip" >> /tmp/space_windows_debug.log
 
     # Update SketchyBar with the workspace's application icons
     # Using workspace.NAME format to match spaces.sh
