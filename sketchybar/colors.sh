@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Available themes: oxocarbon, teal, gray, purple, red, blue, green, orange, yellow
-THEME="${SKETCHYBAR_THEME:-blue}"
+THEME="${SKETCHYBAR_THEME:-teal}"
 
 # Common colors
 export WHITE=0xffffffff
