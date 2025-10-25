@@ -228,7 +228,7 @@ function icon_map() {
   "Blender")
     icon_result=":blender:"
     ;;
-  "Music" | "音乐")
+  "Music" | "音乐" | "YouTube Music")
     icon_result=":music:"
     ;;
   "Calendar" | "日历" | "Fantastical" | "Cron" | "Amie")

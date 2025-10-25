@@ -8,7 +8,7 @@ sketchybar --add item media right \
   icon.color=$ACCENT_COLOR \
   background.drawing=off \
   click_script="aerospace workspace Music" \
-  label.font="BigBlueT Mono:Regularerm437 Nerd Font:11.0" \
+  label.font="BigBlueTerm437 Nerd Font Mono:11.0" \
   label.color=$WORKSPACE_LABEL_SECONDARY_COLOR \
   icon.color=$WORKSPACE_ICON_SECONDARY_COLOR \
   background.color=$ACTIVE_WORKSPACE_SECONDARY_BG_COLOR \

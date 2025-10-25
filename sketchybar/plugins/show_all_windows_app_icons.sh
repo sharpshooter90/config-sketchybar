@@ -16,7 +16,7 @@ MONITORS=$(aerospace list-monitors | awk '{print $1}')
 # Define your spaces with names, titles, icons, and corresponding Aerospace workspace IDs
 # These should match what's in spaces.sh
 MAIN_SPACES=("1:Web:WEB:Arc" "2:Des:DES:Figma" "3:Obsidian:WRITING:Obsidian" "4:Code:CODE:Code")
-SECONDARY_SPACES=("5:Terminal:TERM:Terminal" "6:Comm:COM:Comm")
+SECONDARY_SPACES=("5:Terminal:TERM:Terminal" "6:Comm:COM:Comm" "7:Music:MUSIC:Music")
 
 # Function to get workspace name from ID
 get_workspace_name() {

@@ -37,7 +37,7 @@ SECONDARY_DISPLAY=$2
 handle_single_display() {
     # Update all workspace items
     update_workspace_items "$MAIN_DISPLAY" \
-        "workspace.Web" "workspace.Des" "workspace.Obsidian" "workspace.Code" "workspace.Terminal" "workspace.Comm"
+        "workspace.Web" "workspace.Des" "workspace.Obsidian" "workspace.Code" "workspace.Terminal" "workspace.Comm" "workspace.Music"
     
     # Update the single bracket for all workspaces, if it exists
     sketchybar --set all_spaces associated_display=$MAIN_DISPLAY
@@ -49,7 +49,7 @@ handle_dual_display() {
     update_workspace_items "$MAIN_DISPLAY" "workspace.Web" "workspace.Des" "workspace.Obsidian" "workspace.Code"
     
     # Update secondary workspace items (workspaces 5-6) to use the built-in display (secondary_display)
-    update_workspace_items "$SECONDARY_DISPLAY" "workspace.Terminal" "workspace.Comm"
+    update_workspace_items "$SECONDARY_DISPLAY" "workspace.Terminal" "workspace.Comm" "workspace.Music"
     
     # Update the corresponding brackets
     sketchybar --set main_spaces \
