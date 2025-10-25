@@ -1,4 +1,4 @@
 #!/bin/bash
 
 source "$CONFIG_DIR/colors.sh"
-sketchybar --set $NAME label="$(date +'%a %d %b %I:%M %p')" label.color=$WORKSPACE_LABEL_SECONDARY_COLOR icon.color=$WORKSPACE_ICON_SECONDARY_COLOR background.color=$ACTIVE_WORKSPACE_SECONDARY_BG_COLOR
+sketchybar --set $NAME label="$(date +'%a %d %b %I:%M %p' | tr '[:lower:]' '[:upper:]')" label.color=$WORKSPACE_LABEL_SECONDARY_COLOR icon.color=$WORKSPACE_ICON_SECONDARY_COLOR background.color=$ACTIVE_WORKSPACE_SECONDARY_BG_COLOR

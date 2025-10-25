@@ -64,7 +64,7 @@ case "$SENDER" in
       # Only update app info if this is the correct display for the event
       if [ "$(get_monitor_id "$ITEM_DISPLAY")" = "$(get_monitor_id "$EVENT_DISPLAY")" ]; then
         ICON="$($CONFIG_DIR/plugins/icon_map_fn.sh "$APP_NAME")"
-        sketchybar --set "$NAME" label="$APP_NAME" icon="$ICON"
+        sketchybar --set "$NAME" label="$(echo "$APP_NAME" | tr '[:lower:]' '[:upper:]')" icon="$ICON"
       fi
     fi
     ;;
