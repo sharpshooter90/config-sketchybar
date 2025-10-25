@@ -166,11 +166,10 @@ else
     workspace_args+=" workspace.$name"
   done
 
-  # Add the bracket with the workspace arguments
+ # Add the bracket with the workspace arguments
   sketchybar --add bracket main_spaces \
              $workspace_args \
              --set main_spaces \
-             background.color=$ACTIVE_WORKSPACE_SECONDARY_BG_COLOR \
              background.corner_radius=5 \
              background.height=26 \
              padding_left=0 \
@@ -191,14 +190,6 @@ else
              background.color=$ACTIVE_WORKSPACE_SECONDARY_BG_COLOR \
              background.corner_radius=5 \
              background.height=26 \
-             padding_left=0 \
-             padding_right=0 \
-             background.padding_left=0 \
-             background.padding_right=0 \
-             icon.padding_left=0 \
-             icon.padding_right=0 \
-             label.padding_left=0 \
-             label.padding_right=0 \
              associated_display=$SECONDARY_DISPLAY
 fi
 
