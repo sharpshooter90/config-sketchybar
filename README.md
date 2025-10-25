@@ -131,6 +131,18 @@ A community dotfiles manager that:
 - Integrates with chezmoi for configuration management
 - Automatically reloads services after changes
 
+### Future Plans
+
+**Enhanced User Experience**: Plans are in development for a more intuitive command interface:
+
+- **`ricing Space Config`**: A streamlined command for applying community configurations with better UX
+- **`ricing Space Theme`**: An enhanced theme switching experience with visual previews and better feedback
+- **Interactive Mode**: Commands with interactive prompts and visual selections
+- **Theme Previews**: Live preview of themes before applying
+- **Configuration Wizards**: Guided setup for new users
+
+These improvements will provide a more user-friendly experience while maintaining the powerful functionality of the current commands.
+
 ### Installation
 
 The configuration includes a mechanism to copy theme files to Sketchybar's config location, ensuring proper theme application across the system.
