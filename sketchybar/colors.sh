@@ -20,9 +20,18 @@ if [ -z "$ITEM_BG_PRIMARY_COLOR" ]; then
   export ITEM_BG_PRIMARY_COLOR=0x40ffffff
 fi
 
+# Set default for TEXT_COLOR if not defined by theme
+if [ -z "$TEXT_COLOR" ]; then
+  export TEXT_COLOR=$WHITE
+fi
+
+# Set default for ACTIVE_WORKSPACE_SECONDARY_BG_COLOR if not defined by theme
+if [ -z "$ACTIVE_WORKSPACE_SECONDARY_BG_COLOR" ]; then
+  export ACTIVE_WORKSPACE_SECONDARY_BG_COLOR=$ITEM_BG_COLOR
+fi
+
 # Derived colors
 export ACTIVE_WORKSPACE_BG_COLOR=$ITEM_BG_PRIMARY_COLOR
-export ACTIVE_WORKSPACE_SECONDARY_BG_COLOR=$ITEM_BG_COLOR
 export ACTIVE_WORKSPACE_BORDER_COLOR=$ACCENT_COLOR
 
 # Workspace colors - derived from theme
